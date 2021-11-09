@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-userSchema.statics.findByCredentials = async(email, password) => {
-    const user = await User.findOne({email});
+userSchema.statics.findByCredentials = async(username, password) => {
+    const user = await User.findOne({username});
     if(!user){
         throw new Error('No user found');
     }
@@ -65,12 +65,6 @@ userSchema.pre('save', async function(next) {
         }
         next();
 });
-
-userSchema.pre('remove', async function (next){
-    const user = this;
-    await Task.deleteMany({owner : user._id});
-    next();
-})
 
 const User = mongoose.model('User', userSchema);
 
